@@ -1,6 +1,6 @@
 ---
 version: '3'
-# Example based onhttps://github.com/Stefen-Taime/docker-stack
+# Example based on https://github.com/Stefen-Taime/docker-stack
 
 services:
   postgres:
@@ -18,8 +18,37 @@ services:
     volumes:
       - ./scripts:/scripts
     networks:
-      - docker-stack 
+      - docker-stack
+      
 
+  mysql:
+    build:
+      context: ./mysql
+    restart: always
+    environment:
+      - MYSQL_DATABASE=${MY_DB_NAME}
+      - MYSQL_USER=${MY_DB_USER}
+      - MYSQL_PASSWORD=${MY_DB_PASSWORD}
+      - MYSQL_ROOT_PASSWORD=${MY_DB_ROOT_PASSWORD}
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./mysql/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./mysql/data:/var/lib/mysql 
+    networks:
+      - docker-stack   
+
+
+  adminer:
+    image: adminer:latest
+    ports:
+    - 8085:8080/tcp
+    deploy:
+     restart_policy:
+       condition: on-failure
+    networks:
+      - docker-stack  
+   
     
 networks:
   docker-stack:      
