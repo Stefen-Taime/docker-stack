@@ -6,5 +6,5 @@
 
 ## TODO Items
 
-* ✓ docker-compose sql(postgres&&mysql)
+* ✓ docker-compose sql(postgres && mysql)
 * ❏ Add all docker-compose file .
